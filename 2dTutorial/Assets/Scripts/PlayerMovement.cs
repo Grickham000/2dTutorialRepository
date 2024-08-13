@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float HorizontalInput;
 
     private bool grounded;
+  
 
     // Loads every time the game is loading
     private void Awake()
@@ -58,9 +59,10 @@ public class PlayerMovement : MonoBehaviour
         {
             body.transform.localScale = new Vector3(-1,1,1);
         }
-
+  
         //Set the parameter form the game object animator component with the values we want
         anim.SetBool("run", HorizontalInput != 0);
+        
         anim.SetBool("grounded",isGrounded());
 
         if (wallJumpCooldown > 0.2f)
@@ -68,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
             //below we are intializing a new object with a 2d vector, getting the arrow left and right input to increment the velocity
             //on that direction, then we leave the y velocity(movement) untouched.
             body.velocity = new Vector2(HorizontalInput * speed, body.velocity.y);
-
             if (onWall())
             {
                 body.gravityScale = 0;
@@ -98,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded())
         {
             body.velocity = new Vector2(body.velocity.x, jumpPower);
+            
             anim.SetTrigger("jump");
         }
         else if (onWall() && !isGrounded())
@@ -127,15 +129,18 @@ public class PlayerMovement : MonoBehaviour
         return raycastHit.collider != null;
     }
 
+
+
     private bool onWall()
     {
         RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+       
         return raycastHit.collider != null;
     }
 
     public bool canAttack()
     {
-        return HorizontalInput == 0 && isGrounded() && !onWall();
+        return isGrounded() && !onWall();
     }
 
 }

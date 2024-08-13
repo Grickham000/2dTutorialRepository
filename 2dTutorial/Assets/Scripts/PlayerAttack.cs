@@ -36,7 +36,15 @@ public class PlayerAttack : MonoBehaviour
         anim.SetTrigger("attack");
         //selects what happen when the attack is triggered.
         cooldownTimer = 0;
-        Fireballs[0].transform.position = FirePoint.position;
-        Fireballs[0].GetComponent<Projectile>().SetDirection(MathF.Sign(transform.localScale.x));
+        Fireballs[FindFireball()].transform.position = FirePoint.position;
+        Fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(MathF.Sign(transform.localScale.x));
+    }
+
+    private int FindFireball()
+    {
+        for (int i = 0; i< Fireballs.Length; i++){
+            if (!Fireballs[i].activeInHierarchy) return i;
+        }
+        return 0;
     }
 }
