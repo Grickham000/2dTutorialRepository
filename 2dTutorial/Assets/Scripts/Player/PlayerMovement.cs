@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     //Creating the layer mask to interact with the wall
     [SerializeField] private LayerMask wallLayer;
 
+    [Header ("SFX audio")]
+    [SerializeField] private AudioClip jumpSound;
+
     private float wallJumpCooldown;
     private float HorizontalInput;
 
@@ -85,6 +88,11 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey(KeyCode.Space))
             {
                 jump();
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    SoundManager.instance.PlaySound(jumpSound);
+                }
             }
 
         }

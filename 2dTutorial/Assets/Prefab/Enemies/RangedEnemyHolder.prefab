@@ -140,6 +140,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
+  FireballClip: {fileID: 8300000, guid: 08948a8ece0d4d94a8cb8ac78b6f7333, type: 3}
 --- !u!114 &5767482820453972238
 MonoBehaviour:
   m_ObjectHideFlags: 0

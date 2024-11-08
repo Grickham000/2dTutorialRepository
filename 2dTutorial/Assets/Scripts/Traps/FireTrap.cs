@@ -21,6 +21,9 @@ public class FireTrap : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Health playerHealth;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip fireSound;
+
     private void Update()
     {
         if (playerHealth !=null && active)
@@ -67,6 +70,7 @@ public class FireTrap : MonoBehaviour
 
         //wait for delay, active trap, turn on animation, turn back to normal
         yield return new WaitForSeconds(fireTrapDelay);
+        SoundManager.instance.PlaySound(fireSound);
         spriteRenderer.color = Color.white;
         active = true;
         anim.SetBool("activated", true);

@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackCooldown;
     [SerializeField] private Transform FirePoint;
     [SerializeField] private GameObject[] Fireballs;
+    [SerializeField] private AudioClip FireballClip;
 
     private Animator anim;
     //invoking our PlayerMovement script class to use its properties, this ensures the actions are related.
@@ -34,6 +35,7 @@ public class PlayerAttack : MonoBehaviour
     {
         //indicating which animation will be activated
         anim.SetTrigger("attack");
+        SoundManager.instance.PlaySound(FireballClip);
         //selects what happen when the attack is triggered.
         cooldownTimer = 0;
         Fireballs[FindFireball()].transform.position = FirePoint.position;

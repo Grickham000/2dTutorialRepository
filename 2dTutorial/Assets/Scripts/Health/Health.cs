@@ -19,6 +19,10 @@ public class Health : MonoBehaviour
     [Header("Components")]
     [SerializeField] Behaviour[] components;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip hurtSound;
+
     private bool invulnerable;
 
     private void Awake()
@@ -36,6 +40,7 @@ public class Health : MonoBehaviour
         if(currentHealth > 0)
         {
             anim.SetTrigger("hurt");
+            SoundManager.instance.PlaySound(hurtSound);
             StartCoroutine(Invulnerability());
         }
         else
@@ -44,6 +49,7 @@ public class Health : MonoBehaviour
             {
                 dead = true;
                 anim.SetTrigger("die");
+                SoundManager.instance.PlaySound(deathSound);
                 //if(GetComponent<PlayerMovement>() != null)
                 //GetComponent<PlayerMovement>().enabled = false;
                 
