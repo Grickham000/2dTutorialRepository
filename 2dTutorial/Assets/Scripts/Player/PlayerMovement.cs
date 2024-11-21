@@ -26,7 +26,18 @@ public class PlayerMovement : MonoBehaviour
     private float HorizontalInput;
 
     private bool grounded;
-  
+
+    [Header("Coyote")]
+    [SerializeField] private float coyoteTime;//available coyote time to perform a cayote jump
+    private float coyoteCounter;
+
+    [Header ("Multiple jumps")]
+    [SerializeField] private int extraJumps;
+    private int jumpCounter;
+
+    [Header("Jump power")]
+    [SerializeField] private float wallJumpPowerX;
+    [SerializeField] private float wallJumpPowerY;
 
     // Loads every time the game is loading
     private void Awake()
@@ -68,63 +79,73 @@ public class PlayerMovement : MonoBehaviour
         
         anim.SetBool("grounded",isGrounded());
 
-        if (wallJumpCooldown > 0.2f)
+        //jump
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            //below we are intializing a new object with a 2d vector, getting the arrow left and right input to increment the velocity
-            //on that direction, then we leave the y velocity(movement) untouched.
+            jump();
+        }
+
+        //Adjustable jump height
+        if(Input.GetKeyUp(KeyCode.Space) && body.velocity.y >0)
+        { 
+            body.velocity=new Vector2(body.velocity.x,body.velocity.y/2);
+        }
+
+        if (onWall())
+        {
+            body.gravityScale = 0;
+            body.velocity= Vector2.zero;
+        }
+        else
+        {
+            body.gravityScale = 7;
             body.velocity = new Vector2(HorizontalInput * speed, body.velocity.y);
-            if (onWall())
+
+            if (isGrounded())
             {
-                body.gravityScale = 0;
-                body.velocity = Vector2.zero;
+                coyoteCounter = coyoteTime; //reset counter to be able to perform coyote jumps
+                jumpCounter = extraJumps;
             }
             else
-            {
-                body.gravityScale = 3;
-            }
-
-            //below we are checking if the space button is getting pressed if yes then we are moving in the Y axis with the velocity
-            // of speed variable.
-            if (Input.GetKey(KeyCode.Space))
-            {
-                jump();
-
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    SoundManager.instance.PlaySound(jumpSound);
-                }
-            }
-
-        }
-        else {
-            wallJumpCooldown += Time.deltaTime;
+                coyoteCounter-=Time.deltaTime; //decreaste counter while player is not in the ground
         }
 
 
     }
     private void jump()
     {
-        if (isGrounded())
+        if (coyoteCounter < 0 && !onWall() && jumpCounter <=0 ) return;
+        //if coyote less than 0, we should not be able to jump, and we do not have extra jump
+        SoundManager.instance.PlaySound(jumpSound);
+        if (onWall())
+            WallJump();
+        else
         {
-            body.velocity = new Vector2(body.velocity.x, jumpPower);
-            
-            anim.SetTrigger("jump");
-        }
-        else if (onWall() && !isGrounded())
-        {
-            if (HorizontalInput == 0)
-            {
-                body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 10,0);
-                transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            }
+            if (isGrounded())
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
             else
             {
-                body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
+                //If not grounded and coyote counter bigger than 0 do a normal jump
+                if (coyoteCounter > 0)
+                    body.velocity = new Vector2(body.velocity.x, jumpPower);
+                else
+                {
+                    if (jumpCounter > 0)
+                    {
+                        body.velocity = new Vector2(body.velocity.x, jumpPower);
+                        jumpCounter--;
+                    }
+                }
             }
-            
-            wallJumpCooldown = 0;
+            //reset coyote counter
+            coyoteCounter = 0;
         }
 
+    }
+    private void WallJump()
+    {
+        body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpPowerX, wallJumpPowerY));
+        wallJumpCooldown = 0;
     }
 
 

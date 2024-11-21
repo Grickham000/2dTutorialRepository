@@ -200,6 +200,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   jumpSound: {fileID: 8300000, guid: 4770d747fdd8f294b98637f958dacb99, type: 3}
+  coyoteTime: 0.29
+  extraJumps: 1
+  wallJumpPowerX: 500
+  wallJumpPowerY: 600
 --- !u!95 &2706362195013125610
 Animator:
   serializedVersion: 5

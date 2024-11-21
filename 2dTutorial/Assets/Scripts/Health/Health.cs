@@ -48,7 +48,7 @@ public class Health : MonoBehaviour
             if (!dead)
             {
                 dead = true;
-                anim.SetTrigger("die");
+                
                 SoundManager.instance.PlaySound(deathSound);
                 //if(GetComponent<PlayerMovement>() != null)
                 //GetComponent<PlayerMovement>().enabled = false;
@@ -64,6 +64,8 @@ public class Health : MonoBehaviour
                 {
                     component.enabled = false;
                 }
+                anim.SetBool("grounded",true);
+                anim.SetTrigger("die");
             }
         }
     }
