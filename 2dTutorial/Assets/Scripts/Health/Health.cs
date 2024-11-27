@@ -75,6 +75,18 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
     }
 
+    public void Respawn()
+    {
+        dead = false;
+        Heal(startingHealth);
+        anim.ResetTrigger("die");
+        anim.Play("idle");
+        StartCoroutine(Invulnerability());
+        //Activate All attached component classess
+        foreach( Behaviour component in components)
+            component.enabled = true;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
