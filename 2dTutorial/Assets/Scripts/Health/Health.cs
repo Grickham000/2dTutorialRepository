@@ -52,7 +52,7 @@ public class Health : MonoBehaviour
                 SoundManager.instance.PlaySound(deathSound);
                 //if(GetComponent<PlayerMovement>() != null)
                 //GetComponent<PlayerMovement>().enabled = false;
-                
+
                 //if(GetComponentInParent<EnemyPatrol>() != null)
                 //GetComponentInParent<EnemyPatrol>().enabled = false;
 
@@ -60,12 +60,20 @@ public class Health : MonoBehaviour
                 //    GetComponentInParent<MeleeEnemy>().enabled = false;
 
                 //Disable all attached components.
+                if (gameObject.CompareTag("Player"))
+                    anim.SetBool("grounded", true);
+                anim.SetTrigger("die");
+                try { 
                 foreach ( Behaviour component in components)
                 {
                     component.enabled = false;
                 }
-                anim.SetBool("grounded",true);
-                anim.SetTrigger("die");
+                }
+                catch 
+                {
+
+                }
+
             }
         }
     }
@@ -89,10 +97,10 @@ public class Health : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TakeDamage(1);
-        }
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    TakeDamage(1);
+        //}
     }
     //system collections
     private IEnumerator Invulnerability()

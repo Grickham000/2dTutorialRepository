@@ -10,7 +10,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         }
     }
 }
