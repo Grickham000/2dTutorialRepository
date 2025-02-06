@@ -25,7 +25,7 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         //check if we can attack and are attacking.
-        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown && playerMovement.canAttack())
+        if ((Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.F)) && cooldownTimer > attackCooldown && playerMovement.canAttack())
             Attack();
         //adds the time since the last frame.
         cooldownTimer += Time.deltaTime;

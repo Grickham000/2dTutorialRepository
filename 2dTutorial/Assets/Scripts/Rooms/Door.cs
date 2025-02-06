@@ -1,10 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] private Transform previousRoom;
-    [SerializeField] private Transform nextRoom;
+    [SerializeField] private Transform roomToActivate;
+    [SerializeField] private Transform roomToDeactivate;
     [SerializeField] private CameraController cam;
+    private Coroutine continuousActionCoroutine;
 
     private void Awake()
     {
@@ -15,18 +17,36 @@ public class Door : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            if (collision.transform.position.x < transform.position.x)
+            if (continuousActionCoroutine == null)
             {
-                cam.MoveToNewRoom(nextRoom);
-                nextRoom.GetComponent<Room>().ActivateRoom(true);
-                previousRoom.GetComponent<Room>().ActivateRoom(false);
+                continuousActionCoroutine = StartCoroutine(ContinuosActiveDisable());
             }
-            else
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            if (continuousActionCoroutine != null)
             {
-                cam.MoveToNewRoom(previousRoom);
-                previousRoom.GetComponent<Room>().ActivateRoom(true);
-                nextRoom.GetComponent<Room>().ActivateRoom(false);
+                StopCoroutine(continuousActionCoroutine);
+                continuousActionCoroutine = null;
             }
+        }
+    }
+
+    private IEnumerator ContinuosActiveDisable()
+    {
+        while (true)
+        {
+            cam.MoveToNewRoom(roomToActivate);
+            if (!roomToActivate.GetComponent<Room>().Active)
+            {
+                roomToActivate.GetComponent<Room>().ActivateRoom(true);
+            }
+            roomToDeactivate.GetComponent<Room>().ActivateRoom(false);
+            yield return null;
         }
     }
 }

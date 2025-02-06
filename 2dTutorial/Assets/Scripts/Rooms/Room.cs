@@ -4,6 +4,8 @@ public class Room : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemies;
     private Vector3[] initialPosition;
+    public bool Active = true;
+    [SerializeField] private bool initialState;
 
     private void Awake()
     {
@@ -14,9 +16,11 @@ public class Room : MonoBehaviour
             if (enemies[i] != null)
                 initialPosition[i] = enemies[i].transform.position;
         }
+        ActivateRoom(initialState);
     }
     public void ActivateRoom(bool _status)
     {
+        Active = _status;
         //Activate/deactivate enemies
         for (int i = 0; i < enemies.Length; i++)
         {

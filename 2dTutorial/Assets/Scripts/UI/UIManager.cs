@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
     }
     public void MainMenu()
     {
+        PauseGame(false);
         SceneManager.LoadScene(0);
     }
 

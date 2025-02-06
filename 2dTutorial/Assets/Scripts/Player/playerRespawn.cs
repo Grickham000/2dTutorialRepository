@@ -7,6 +7,7 @@ public class playerRespawn : MonoBehaviour
     private Transform currentCheckpoint;//store last checkpoint
     private Health playerHealth;
     private UIManager uiManager;
+    private GameObject currentCheckpointRoom;
 
 
     private void Awake()
@@ -25,6 +26,7 @@ public class playerRespawn : MonoBehaviour
         }
 
         transform.position=currentCheckpoint.position;//Move player to checkpoint position
+        currentCheckpointRoom.GetComponent<Room>().ActivateRoom(true);
         //Restore player health and reset animation
         playerHealth.Respawn();
         //Move camera to the last checkpoint room
@@ -37,6 +39,7 @@ public class playerRespawn : MonoBehaviour
         {
             currentCheckpoint = collision.transform;//store position at the activated checkpoint
             SoundManager.instance.PlaySound(checkPointSound);
+            currentCheckpointRoom=collision.GetComponent<RoomManager>().getRoom();
             collision.GetComponent<Collider2D>().enabled = false;//deactivate checkpoint collider
             collision.GetComponent<Animator>().SetTrigger("appear");//trigger checkpoint annimation
             
